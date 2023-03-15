@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+#One server file with config and app etc.
 # app.py
 import os, json, hashlib
 from datetime import datetime, timedelta
@@ -25,6 +26,9 @@ csrf.init_app(app)
 #DB HEROKU
 db = SQLAlchemy()
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://b9c5bda1af9632:406f00eb@eu-cdbr-west-03.cleardb.net/heroku_f578aa3af4082ba"
+app.config['SQLALCHEMY_POOL_RECYCLE'] = 499
+app.config['SQLALCHEMY_POOL_TIMEOUT'] = 20
+
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
