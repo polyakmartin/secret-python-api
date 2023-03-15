@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    {% block title %}<title>Secret-Flask App</title>{% endblock %}
+    <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='css/bootstrap.min.css') }}>
+</head>
+<body style="display:flex; justify-content: center; align-items: center; text-align: center; min-height: 100vh; background-color: rgb(140, 184, 169);">
+    {% block content %}
+    {% endblock %}
+</body>
+<script src={{ url_for('static', filename='js/bootstrap.min.js') }}></script>
+</html>

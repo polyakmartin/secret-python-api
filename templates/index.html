@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3 style="width:fit-content; font-family: fantasy;">Its just an information web page..</h3>
+<form action="{{ url_for('secret') }}" method="post" name="secret_form" required>
+    {{ form.csrf_token() }}
+<table>
+    <tbody>
+        <tr>
+            <td>{{ form.secret(class="input", placeholder="@secret") }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.expV(class="input", placeholder="@expireAfterViews") }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.expG(class="input", placeholder="@expireAfter") }}</td>
+        </tr>
+    </tbody>
+</table>
+<button type="submit" style="position: relative; border-radius: 5px; background-color: rgb(8, 173, 118); border-width: 1px; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">
+    &nbsp;Create secret
+</button>
+</form>
+{% endblock %}
