@@ -3,7 +3,6 @@
 {% block content %}
 <h3 style="width:fit-content; font-family: fantasy;">Its just an information web page..</h3>
 <form action="{{ url_for('secret') }}" method="post" name="secret_form">
-    {{ form.csrf_token }}    
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 <table>
     <tbody>

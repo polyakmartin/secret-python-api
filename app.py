@@ -14,21 +14,23 @@ from flask_wtf.csrf import CSRFProtect
 SECRET_KEY = os.urandom(32)
 
 # Page views
-appViews = 0
 global views
 
+# Basic flask app config
 app = Flask(__name__, static_folder='static', template_folder='templates')
 
 # CSRF Protection
 csrf = CSRFProtect(app)
 app.config['SECRET_KEY'] = SECRET_KEY
 csrf.init_app(app)
-#DB HEROKU
+
+# DB Mysql
 db = SQLAlchemy()
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://b9c5bda1af9632:406f00eb@eu-cdbr-west-03.cleardb.net/heroku_f578aa3af4082ba"
-app.config['SQLALCHEMY_POOL_RECYCLE'] = 499
+app.config['SQLALCHEMY_POOL_RECYCLE'] = 499  # For 500 error when heroku's clearDB not response
 app.config['SQLALCHEMY_POOL_TIMEOUT'] = 20
 
+# Flask mysql module
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
@@ -52,13 +54,13 @@ class Secret(db.Model):
 # MyForm
 # Flask minimal form 
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms import StringField, IntegerField
+from wtforms.validators import DataRequired, NumberRange
 
 class SecretForm(FlaskForm):
     secret = StringField(validators=[DataRequired()], name=('sec'))
-    expV = StringField(validators=[DataRequired()], name=('expV'))
-    expG = StringField(validators=[DataRequired()], name=('expT'))
+    expV = IntegerField(validators=[DataRequired(), NumberRange(min=0)], name=('expV'))
+    expG = IntegerField(validators=[DataRequired(), NumberRange(min=0)], name=('expT'))
 
 
 # API 
@@ -73,6 +75,7 @@ def index():
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
+# Post request
 @app.route("/secret", methods=['POST'])
 def secret():
     now = datetime.now()
@@ -90,6 +93,8 @@ def secret():
     db.session.commit()
     return json.dumps(secret_form)
 
+
+# Get request
 @app.route("/secret/<string:hash>", methods=['GET'])
 def secret_hash(hash):
     query = Secret.query.filter_by(hash=hash).first_or_404()
@@ -109,3 +114,6 @@ def secret_hash(hash):
 # Running flask app
 if __name__=="__main__":
     app.run()
+
+
+# Create Procfile for running gunicorn which run flask app on heroku
