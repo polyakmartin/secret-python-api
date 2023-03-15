@@ -20,7 +20,7 @@ global views
 app = Flask(__name__, static_folder='static', template_folder='templates')
 
 # CSRF Protection
-csrf = CSRFProtect(app)
+csrf = CSRFProtect()
 app.config['SECRET_KEY'] = SECRET_KEY
 csrf.init_app(app)
 
