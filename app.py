@@ -101,7 +101,7 @@ def secret_hash(hash):
     query = Secret.query.filter_by(hash=hash).first_or_404()
     views = int(query.remainingViews) - 1
     if str(query.expiresAt) > str(datetime.now()):
-        if (views >= 1):
+        if (views > 0):
             query.remainingViews = views
             db.session.commit()
         else:
