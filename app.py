@@ -20,9 +20,8 @@ global views
 app = Flask(__name__, static_folder='static', template_folder='templates')
 
 # CSRF Protection
-csrf = CSRFProtect()
+csrf = CSRFProtect(app)
 app.config['SECRET_KEY'] = SECRET_KEY
-csrf.init_app(app)
 
 # DB Mysql
 db = SQLAlchemy()
@@ -37,7 +36,7 @@ migrate = Migrate(app, db)
 # MyModel
 # Flask db migrate execute this block
 class Secret(db.Model):
-    hash = db.Column(db.String(100), primary_key=True)
+    hash = db.Column(db.String(100))
     secretText = db.Column(db.String(80))
     createdAt = db.Column(db.String(80))
     expiresAt = db.Column(db.String(80))
@@ -78,20 +77,23 @@ def favicon():
 # Post request
 @app.route("/secret", methods=['POST'])
 def secret():
-    now = datetime.now()
-    token = now + timedelta(minutes=int(request.form['expT']))
-    users_hash = request.form['sec']
-    hasher = hashlib.md5(users_hash.encode()) # md5 hashing
-    secret = Secret(str(hasher.hexdigest()), str(users_hash), str(now), str(token), int(request.form['expV']))
-    secret_form = {
-        "hash": str(hasher.hexdigest()),
-        "secret": request.form['sec'],
-        "expireAfterViews": request.form['expV'],
-        "expireAfter": request.form['expT']
-    }
-    db.session.add(secret)
-    db.session.commit()
-    return json.dumps(secret_form)
+    if request.method == 'GET':
+        abort(404)
+    else:
+        now = datetime.now()
+        token = now + timedelta(minutes=int(request.form['expT']))
+        users_hash = request.form['sec']
+        hasher = hashlib.md5(users_hash.encode()) # md5 hashing
+        secret = Secret(str(hasher.hexdigest()), str(users_hash), str(now), str(token), int(request.form['expV']))
+        secret_form = {
+            "hash": str(hasher.hexdigest()),
+            "secret": request.form['sec'],
+            "expireAfterViews": request.form['expV'],
+            "expireAfter": request.form['expT']
+        }
+        db.session.add(secret)
+        db.session.commit()
+        return json.dumps(secret_form)
 
 
 # Get request
