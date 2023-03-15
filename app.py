@@ -21,7 +21,7 @@ app = Flask(__name__, static_folder='static', template_folder='templates')
 # CSRF Protection
 csrf = CSRFProtect(app)
 app.config['SECRET_KEY'] = SECRET_KEY
-
+csrf.init_app(app)
 #DB HEROKU
 db = SQLAlchemy()
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://b9c5bda1af9632:406f00eb@eu-cdbr-west-03.cleardb.net/heroku_f578aa3af4082ba"
@@ -99,3 +99,9 @@ def secret_hash(hash):
     else:
         abort(404)
     return render_template('secret.html', query=query)
+
+
+
+# Running flask app
+if __name__=="__main__":
+    app.run()
