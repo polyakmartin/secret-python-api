@@ -36,10 +36,11 @@ migrate = Migrate(app, db)
 # MyModel
 # Flask db migrate execute this block
 class Secret(db.Model):
+    id_secret = db.Column(db.Integer, primary_key=True)
     hash = db.Column(db.String(100))
     secretText = db.Column(db.String(80))
-    createdAt = db.Column(db.String(80))
-    expiresAt = db.Column(db.String(80))
+    createdAt = db.Column(db.String(45))
+    expiresAt = db.Column(db.String(45))
     remainingViews = db.Column(db.Integer)
 
     def __init__(self, hash, secretText, createdAt, expiresAt, remainingViews):
