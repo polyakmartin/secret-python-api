@@ -8,7 +8,6 @@ from flask import Flask, render_template, request, abort, jsonify
 from flask import send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_wtf.csrf import CSRFProtect
 
 # SECRET KEY for CSRF PROTECTION
 SECRET_KEY = os.urandom(32)
@@ -20,7 +19,6 @@ global views
 app = Flask(__name__, static_folder='static', template_folder='templates')
 
 # CSRF Protection
-csrf = CSRFProtect(app)
 app.config['SECRET_KEY'] = SECRET_KEY
 
 # DB Mysql
@@ -36,7 +34,7 @@ migrate = Migrate(app, db)
 # MyModel
 # Flask db migrate execute this block
 class Secret(db.Model):
-    id_secret = db.Column(db.Integer, primary_key=True)
+    id_secret = db.Column(db.Integer, primary_key=True, autoincrement=True)
     hash = db.Column(db.String(100))
     secretText = db.Column(db.String(80))
     createdAt = db.Column(db.String(45))
