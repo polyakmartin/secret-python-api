@@ -23,7 +23,7 @@ app.config['SECRET_KEY'] = SECRET_KEY
 
 # DB Mysql
 db = SQLAlchemy()
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://b9c5bda1af9632:406f00eb@eu-cdbr-west-03.cleardb.net/heroku_f578aa3af4082ba"
+app.config["SQLALCHEMY_DATABASE_URI"] = ""
 app.config['SQLALCHEMY_POOL_RECYCLE'] = 499  # For 500 error when heroku's clearDB not response
 app.config['SQLALCHEMY_POOL_TIMEOUT'] = 20
 
